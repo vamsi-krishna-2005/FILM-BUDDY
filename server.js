@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const express = require('express')
-const app = express()
+const mongoose = require('mongoose')   
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const flash = require('express-flash')
@@ -9,32 +9,48 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 const initializePassport = require('./passport-config')
 
-initializePassport(passport,
-     email=> users.find(user => user.email == email),
-    id => users.find(user => user.id == id))
-const users = []
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URL, {
+    
+})
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', () => {
+    console.log('Connected to MongoDB')
+})
+
+
+const User = require('./models/User')
+
+initializePassport(
+    passport,
+    email => User.findOne({ email }),
+    id => User.findById(id)
+)
+
+const app = express()
 
 app.set('view engine', 'ejs')
-app.use(express.urlencoded({ extended: false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }))
-
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
-app.get('/', checkAuthenticated, (req, res)=> {
-    res.render('index', {name: req.user.name})
+
+app.get('/', checkAuthenticated, (req, res) => {
+    res.render('index', { name: req.user.name })
 })
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login')
 })
 
-app.get('/register', checkNotAuthenticated, (req, res)=> {
+app.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register')
 })
 
@@ -44,24 +60,26 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true
 }))
 
-app.post('/register', checkNotAuthenticated, async (req, res)=> {
+app.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        users.push({
-            id: Date.now().toString(),
-            name:req.body.name,
+        const user = new User({
+            name: req.body.name,
             email: req.body.email,
             password: hashedPassword
         })
+        await user.save()
         res.redirect('/login')
-    } catch {
+    } catch (err) {
+        console.error('Error during registration:', err)  // Log the error
         res.redirect('/register')
     }
 })
 
-app.delete('/logout', (req, res, next)=> {
-    req.logOut((err)=> {
-        if(err) {
+
+app.delete('/logout', (req, res, next) => {
+    req.logOut((err) => {
+        if (err) {
             return next(err)
         }
         res.redirect('/login')
@@ -69,19 +87,19 @@ app.delete('/logout', (req, res, next)=> {
 })
 
 function checkAuthenticated(req, res, next) {
-    if(req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         return next()
     }
     res.redirect('/login')
 }
 
 function checkNotAuthenticated(req, res, next) {
-    if(req.isAuthenticated()) {
-       return res.redirect('/')
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
     }
     next()
 }
 
-app.listen(3000, ()=> {
-    console.log("Server Running on http://localhost:3000/")
+app.listen(3000, () => {
+    console.log('Server running on http://localhost:3000/')
 })

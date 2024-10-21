@@ -1,29 +1,34 @@
-const { authenticate } = require('passport')
-const bcrypt = require('bcrypt')
 const LocalStrategy = require('passport-local').Strategy
+const bcrypt = require('bcrypt')
 
 function initialize(passport, getUserByEmail, getUserById) {
     const authenticateUser = async (email, password, done) => {
-         const user = getUserByEmail(email)
-         if(user == null) {
-            return done(null, false, { message: 'No User with that email'})
-         }
+        try {
+            const user = await getUserByEmail(email)  // MongoDB query is async
+            if (user == null) {
+                return done(null, false, { message: 'No User with that email' })
+            }
 
-         try {
-            if(await bcrypt.compare(password, user.password)) {
+            // Compare hashed password
+            if (await bcrypt.compare(password, user.password)) {
                 return done(null, user)
             } else {
-                return done(null, false, {message: 'Password Incorrect'})
+                return done(null, false, { message: 'Password Incorrect' })
             }
-         }
-         catch(e) {
+        } catch (e) {
             return done(e)
-         }
+        }
     }
-    passport.use(new LocalStrategy({ usernameField: 'email'}, authenticateUser))
+
+    passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
     passport.serializeUser((user, done) => done(null, user.id))
-    passport.deserializeUser((id, done) => {
-        return done(null, getUserById(id))
+    passport.deserializeUser(async (id, done) => {
+        try {
+            const user = await getUserById(id)  // MongoDB query is async
+            return done(null, user)
+        } catch (e) {
+            return done(e)
+        }
     })
 }
 

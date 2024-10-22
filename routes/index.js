@@ -4,7 +4,7 @@ const router = express.Router()
 
 // Home Route
 router.get('/', checkAuthenticated, (req, res) => {
-    res.render('index', { name: req.user.name })
+    res.render('index')
 })
 
 module.exports = router

@@ -1,0 +1,202 @@
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Caveat:wght@400;700&family=Lobster&family=Monoton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+.navs{
+    font: size 17px;
+    margin-right:10px;
+    font-family: "Roboto Condensed", Sans-serif;
+}
+.but{
+    color:white;
+    border-width:0px;
+    background-color:red;
+    width:118px;
+    padding:3px;
+}
+.podcast-section{
+    text-align:center;
+    font-family: "Roboto Condensed", Sans-serif;
+    font-size:20px;
+    background-color:red;
+    padding-top:40px;
+    color:white;
+}
+.video{
+    text-align:center;
+}
+.showcard-span{
+    color:black;
+    background-color:white;
+    height:30px;
+    width:auto;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    padding:5px;
+}
+.show-section{
+    text-align:center;
+    font-family: "Roboto Condensed", Sans-serif;
+    font-size:20px;
+    background-color:black;
+    padding-top:40px;
+    color:white;
+}
+.podcast-album{
+    display:flex;
+    flex-direction:row;
+    color:white;
+    
+}
+.blog-album{
+    display:flex;
+    flex-direction:row;
+    color:white;
+    background-color:red;
+    
+}
+.card1{
+    background-image:url('FR_Podcast_David-Boxerbaum-featured-1280x720.jpg');
+    background-size:cover;
+    height:600px;
+    margin:5px;
+    text-align:start;
+    padding:10px;
+    flex-grow:1;
+}
+.card2{
+    background-image:url('card2.jpg');
+    background-size:cover;
+    height:600px;
+    margin:5px;
+    text-align:start;
+    padding:10px;
+    flex-grow:1;
+}
+.card3{
+    background-image:url('card3.jpg');
+    background-size:cover;
+    height:600px;
+    margin:5px;
+    text-align:start;
+    padding:10px;
+    flex-grow:1;
+}
+.card4{
+    background-image:url('card4.jpg');
+    background-size:cover;
+    height:600px;
+    margin:5px;
+    text-align:start;
+    padding:10px;
+    flex-grow:1;
+}
+.showcard1{
+    background-image:url('showcard1.jpg');
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+.showcard2{
+    background-image:url('showcard2.jpg');
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+.showcard3{
+    background-image:url('showcard3');
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+.showcard4{
+    background-image:url('showcard4.jpg');
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+.video-background {
+    position: relative;
+    height: 70vh; /* Full viewport height */
+    overflow: hidden; /* Prevent overflow */
+}
+.custom-navbar {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    position: fixed; /* Position it absolutely */
+    width: 100%; /* Full width */
+    z-index: 1000; /* Ensure it is above other elements */
+    font-family: "Roboto Condensed", Sans-serif;
+    top:0;
+}
+.video-container {
+    position: relative;
+    width: 100vw; /* Full viewport width */
+    height: 80vh; /* Set your desired height */
+    overflow: hidden;
+}
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1; /* Place video behind text */
+    transform: translate(-50%, -50%); /* Center the video */
+}
+
+.overlay-text {
+    position: relative; /* Position relative to the container */
+    color: white; /* Text color */ 
+    z-index: 1; /* Ensure text is above the video */
+    display:flex;
+    min-height: 100%;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:20px;
+    font-family: Garamond, serif;
+    font-style:italic;
+    letter-spacing:1px;
+    
+    
+}
+.line {
+    display: inline-block; /* Make it inline */
+    width: 30px; /* Set the desired width */
+    height: 0.5px; /* Thickness of the line */
+    background-color:white; /* Color of the line */
+    margin-right: 10px; /* Spacing around the text */
+}
+.overlay-text h1 {
+    font-size: 6em;
+    font-weight:200;
+    line-height: 0.8em;
+    width:10px; /* Adjust size as needed */
+}
+
+span{
+    color:red;
+}
+.footer{
+    background-color:#555555;
+    color:white;
+}
+
+
+@media (max-width: 768px) {
+    .podcast-album {
+        flex-direction: column; /* Stack cards vertically */
+    }
+}
+
+
+@media (max-width: 768px) {
+    .blog-album {
+        flex-direction: column; /* Stack cards vertically */
+    }
+}

@@ -4,6 +4,9 @@ const passport = require('passport')
 const User = require('../models/User')
 const { checkAuthenticated, checkNotAuthenticated } = require('../middleware/auth')
 const router = express.Router()
+const flash = require('express-flash')
+
+router.use(flash())
 
 // Login Route
 router.get('/login', checkNotAuthenticated, (req, res) => {
@@ -22,6 +25,11 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 })
 
 router.post('/register', checkNotAuthenticated, async (req, res) => {
+    const { name, email, password, confirmpassword} = req.body
+    if(password != confirmpassword)
+    {
+        return res.render('register', { message: 'Passwords did not match', name, email });
+    }
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const user = new User({

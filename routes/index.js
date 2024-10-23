@@ -1,9 +1,8 @@
 const express = require('express')
-const { checkAuthenticated } = require('../middleware/auth')
 const router = express.Router()
 
 // Home Route
-router.get('/', checkAuthenticated, (req, res) => {
+router.get('/', (req, res) => {
     res.render('index')
 })
 

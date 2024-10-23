@@ -187,6 +187,19 @@ span{
     color:white;
 }
 
+.mail-logo{
+    border-radius:40px;
+    background-color:red;
+    color:white;
+    width:50px;
+    height:50px;
+    padding:10px;
+    display: flex;
+    flex-direction:column;
+    text-align:center;
+    font-weight:bold;
+}
+
 
 @media (max-width: 768px) {
     .podcast-album {

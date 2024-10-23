@@ -13,11 +13,28 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login')
 })
 
-router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}))
+router.post('/login', checkNotAuthenticated, (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err); // Error occurred during authentication
+        }
+        if (!user) {
+           return res.render('login', { message: 'Password Not Matched'}); // Flash the error message
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err); // Error occurred during login
+            }
+            req.session.user = {
+                id: user.id, 
+                name: user.name, 
+                email: user.email
+            };
+            res.redirect('/'); // Successful login
+        });
+    })(req, res, next);
+});
+
 
 // Register Route
 router.get('/register', checkNotAuthenticated, (req, res) => {
@@ -46,13 +63,13 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
 })
 
 // Logout Route
-router.delete('/logout', (req, res, next) => {
+router.post('/logout', (req, res, next) => {
     req.logOut((err) => {
         if (err) {
-            return next(err)
+            return next(err);
         }
-        res.redirect('/login')
-    })
-})
+        res.redirect('/');  // After logging out, redirect to the home page
+    });
+});
 
 module.exports = router

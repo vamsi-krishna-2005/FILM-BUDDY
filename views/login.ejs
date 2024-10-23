@@ -48,18 +48,50 @@
         button:hover {
             background-color: darkred; /* Button hover effect */
         }
+        /* Style for the "Do you have an account?" section */
+        .register-section {
+            margin-top: 20px; /* Spacing above the section */
+            text-align: center;
+            color: white;
+        }
+        .register-section p {
+            margin: 0;
+        }
+        /* Style for the register link */
+        .register-section a {
+            color: red; /* Link color */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .register-section a:hover {
+            text-decoration: underline; /* Hover effect for the link */
+        }
+        #errorMessage {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="bg-image"></div>
     <div class="login-container">
         <h1>Login</h1>
+
+        <% if (locals.message) { %>
+            <div id="errorMessage"><%= locals.message %></div>
+        <% } %>
+
         <form action="/login" method="post">
             <input type="email" placeholder="Email" id="email" name="email" required>
             <input type="password" placeholder="Password" id="password" name="password" required>
             <button type="submit">Login</button>
         </form>
-        <a href="/register">Register</a>
+        <!-- Register Section -->
+        <div class="register-section">
+            <p>Don't have an account?</p>
+            <a href="/register">Register here</a>
+        </div>
     </div>
 </body>
 </html>

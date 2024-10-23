@@ -22,12 +22,17 @@ app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: false }
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
 app.use(express.static('public'))
+app.use((req, res, next)=> {
+    res.locals.user = req.user || null
+    next()
+})
 
 // Routes
 app.use('/', require('./routes/index'))

@@ -6,6 +6,7 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 const connectDB = require('./config/db')
 const initializePassport = require('./config/passport-config')
+const User = require('./models/User')
 
 const app = express()
 
@@ -19,6 +20,7 @@ initializePassport(passport)
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
+app.use(express.json())
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -37,6 +39,34 @@ app.use((req, res, next)=> {
 // Routes
 app.use('/', require('./routes/index'))
 app.use('/', require('./routes/auth'))
+app.use('/', require('./routes/podcast'))
+app.use('/', require('./routes/upload'))
+app.use('/', require('./routes/admin'))
+app.use('/', require('./routes/course'))
+
+const createAdminIfNotExists = async () => {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    let user = await User.findOne({ email: adminEmail });
+
+    if (!user) {
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+        user = new User({
+            name: 'Admin',
+            email: adminEmail,
+            password: hashedPassword,
+            isAdmin: true
+        });
+        await user.save();
+        console.log('Admin user created');
+    } else {
+        console.log('Admin user already exists');
+    }
+};
+
+createAdminIfNotExists();
+
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000/')

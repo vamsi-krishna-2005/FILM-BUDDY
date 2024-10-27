@@ -1,0 +1,12 @@
+<!-- views/course.ejs -->
+<h1>Course Videos</h1>
+
+<% courses.forEach(course => { %>
+    <h2><%= course.title %></h2>
+    <p><%= course.content %></p>
+
+    <!-- YouTube Embed -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= course.VideoId %>"
+            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+    </iframe>
+<% }); %>

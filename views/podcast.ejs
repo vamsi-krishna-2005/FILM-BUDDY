@@ -1,0 +1,20 @@
+<!-- views/podcast.ejs -->
+<h1>Podcasts</h1>
+
+<% podcasts.forEach(podcast => { %>
+    <h2><%= podcast.title %></h2>
+    <p><%= podcast.content %></p>
+
+    <!-- Spotify Player Embed -->
+    <% if (podcast.videoType === 'episode') { %>
+        <iframe src="https://open.spotify.com/embed/episode/<%= podcast.VideoId %>"
+                width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
+        </iframe>
+    <% } else if (podcast.videoType === 'show') { %>
+        <iframe src="https://open.spotify.com/embed/show/<%= podcast.VideoId %>"
+                width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
+        </iframe>
+    <% } else { %>
+        <p>Invalid or missing video link.</p>
+    <% } %>
+<% }); %>

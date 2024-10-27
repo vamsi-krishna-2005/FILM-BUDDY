@@ -2,7 +2,11 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const User = require('../models/User')
+<<<<<<< HEAD
 const { checkAuthenticated, checkNotAuthenticated, isAdmin } = require('../middleware/auth')
+=======
+const { checkAuthenticated, checkNotAuthenticated } = require('../middleware/auth')
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 const router = express.Router()
 const flash = require('express-flash')
 
@@ -13,7 +17,10 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login')
 })
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 router.post('/login', checkNotAuthenticated, (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
@@ -23,7 +30,10 @@ router.post('/login', checkNotAuthenticated, (req, res, next) => {
            return res.render('login', { message: 'Password Not Matched'});
             // Flash the error message
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
         req.logIn(user, (err) => {
             if (err) {
                 return next(err); // Error occurred during login
@@ -34,11 +44,15 @@ router.post('/login', checkNotAuthenticated, (req, res, next) => {
                 email: user.email
             };
 
+<<<<<<< HEAD
             if (user.isAdmin) {
                 return res.redirect('/admin');
             } else {
                 return res.redirect('/'); // Redirect non-admins to the homepage
             }
+=======
+            res.redirect('/'); // Successful login
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
         });
     })(req, res, next);
 });
@@ -57,7 +71,11 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
     }
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
+<<<<<<< HEAD
         const isAdmin = (email === process.env.ADMIN_EMAIL)
+=======
+        const isAdmin = email === 'adminuser@example.com'
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
         const user = new User({
             name: req.body.name,
             email: req.body.email,

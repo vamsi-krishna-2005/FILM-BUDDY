@@ -6,6 +6,7 @@
     <p><%= podcast.content %></p>
 
     <!-- Spotify Player Embed -->
+<<<<<<< HEAD
     <% if (podcast.videoType === 'episode') { %>
         <iframe src="https://open.spotify.com/embed/episode/<%= podcast.VideoId %>"
                 width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
@@ -17,4 +18,9 @@
     <% } else { %>
         <p>Invalid or missing video link.</p>
     <% } %>
+=======
+    <iframe src="https://open.spotify.com/embed/episode/<%= podcast.link %>"
+            width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
+    </iframe>
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 <% }); %>

@@ -13,9 +13,13 @@ const postSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+<<<<<<< HEAD
     },
     VideoId: String,
     videoType: String
+=======
+    }
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 });
 
 module.exports = mongoose.model('Post', postSchema);

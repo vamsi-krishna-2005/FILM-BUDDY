@@ -16,6 +16,7 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
+<<<<<<< HEAD
 function isAdmin(req, res, next) {
     if (req.isAuthenticated() && req.user.isAdmin) {
         return next();
@@ -25,11 +26,26 @@ function isAdmin(req, res, next) {
 
 
 router.get('/upload', isAdmin, (req, res) => {
+=======
+function checkAdmin(req, res, next) {
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        res.status(403).send('Forbidden');
+    }
+}
+
+router.get('/upload', checkAdmin, (req, res) => {
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
     res.render('upload');  // Only accessible by admins
 });
 
 module.exports = {
     checkAuthenticated,
+<<<<<<< HEAD
     checkNotAuthenticated,
     isAdmin
+=======
+    checkNotAuthenticated
+>>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 }

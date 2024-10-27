@@ -1,26 +1,30 @@
 <!-- views/podcast.ejs -->
-<h1>Podcasts</h1>
+<h1>Podcasts and Courses</h1>
 
-<% podcasts.forEach(podcast => { %>
+<% if (podcast) { %>
     <h2><%= podcast.title %></h2>
     <p><%= podcast.content %></p>
-
-    <!-- Spotify Player Embed -->
-<<<<<<< HEAD
+    
+    <!-- Embed the correct player based on videoType -->
     <% if (podcast.videoType === 'episode') { %>
+        <!-- Spotify Episode Embed -->
         <iframe src="https://open.spotify.com/embed/episode/<%= podcast.VideoId %>"
                 width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
         </iframe>
     <% } else if (podcast.videoType === 'show') { %>
+        <!-- Spotify Show Embed -->
         <iframe src="https://open.spotify.com/embed/show/<%= podcast.VideoId %>"
                 width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
         </iframe>
-    <% } else { %>
-        <p>Invalid or missing video link.</p>
     <% } %>
-=======
-    <iframe src="https://open.spotify.com/embed/episode/<%= podcast.link %>"
-            width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
+<% } else if (course) { %>
+    <h2><%= course.title %></h2>
+    <p><%= course.content %></p>
+
+    <!-- YouTube Video Embed for courses -->
+    <iframe width="100%" height="400" src="https://www.youtube.com/embed/<%= course.VideoId %>"
+            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
     </iframe>
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
-<% }); %>
+<% } else { %>
+    <p>No valid content available.</p>
+<% } %>

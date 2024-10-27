@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-<<<<<<< HEAD
   "devDependencies": {
     "dotenv": "^16.4.5",
     "nodemon": "^3.1.7"
@@ -17,34 +16,14 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "ejs": "^3.1.10",
-=======
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "bootstrap": "^5.3.3",
-    "crypto": "^1.0.1",
-    "ejs": "^3.1.10",
-    "eslint": "^9.13.0",
-    "esm": "^3.2.25",
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
     "express": "^4.21.1",
     "express-ejs": "^2.0.0",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.1",
     "method-override": "^3.0.0",
-<<<<<<< HEAD
     "mongoose": "^8.7.3",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
-=======
-    "mongoose": "^8.7.2",
-    "nodemailer": "^6.9.15",
-    "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "session": "^0.1.0"
-  },
-  "devDependencies": {
-    "dotenv": "^16.4.5",
-    "nodemon": "^3.1.7"
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
+    "path": "^0.12.7"
   }
 }

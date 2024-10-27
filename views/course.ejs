@@ -1,16 +1,104 @@
-<!-- views/course.ejs -->
-<h1>Course Videos</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script src="https://kit.fontawesome.com/cf4baec49e.js" crossorigin="anonymous"></script>
+    <title>Courses</title>
+    <style>
+        /* Styling for the thumbnail */
+        .course-video-container {
+            position: relative;
+            cursor: pointer;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .course-thumbnail {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            filter: brightness(0.6); /* Dark overlay effect */
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2em;
+        }
+        /* Styling for the modal content */
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .modal-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        .course-description {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #6c757d;
+            font-style: italic;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Courses</h1>
+        <div class="row">
+            <% courses.forEach(course => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="course-video-container" data-toggle="modal" data-target="#videoModal<%= course._id %>">
+                        <!-- Full-size YouTube thumbnail with dark overlay -->
+                        <img src="https://img.youtube.com/vi/<%= course.VideoId %>/0.jpg" alt="<%= course.title %>" class="course-thumbnail">
+                        <div class="overlay">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                    <div class="course-info text-center">
+                        <h5><%= course.title %></h5>
+                        <p class="date-text"><%= new Date(course.createdAt).toLocaleDateString() %></p>
+                    </div>
+                </div>
 
-<% courses.forEach(course => { %>
-    <h2><%= course.title %></h2>
-    <p><%= course.content %></p>
+                <!-- Video Modal with content below -->
+                <div class="modal fade" id="videoModal<%= course._id %>" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel<%= course._id %>" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="videoModalLabel<%= course._id %>"><%= course.title %></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Embedded video -->
+                                <iframe width="100%" height="400" src="https://www.youtube.com/embed/<%= course.VideoId %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                
+                                <!-- Title and description below the video -->
+                                <h5 class="modal-title mt-3"><%= course.title %></h5>
+                                <p class="course-description">
+                                    <%= course.content %> <!-- Assumes `description` is part of course data -->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
 
-    <!-- YouTube Embed -->
-<<<<<<< HEAD
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= course.VideoId %>"
-=======
-    <iframe width="560" height="315" src="https://www.youtube.com/<%= course.link %>"
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
-            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-<% }); %>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

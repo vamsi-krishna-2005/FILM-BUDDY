@@ -7,12 +7,8 @@ const methodOverride = require('method-override')
 const connectDB = require('./config/db')
 const initializePassport = require('./config/passport-config')
 const User = require('./models/User')
-<<<<<<< HEAD
 const bcrypt = require('bcrypt')
 const { isAdmin } = require('./middleware/auth')
-=======
-
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 const app = express()
 
 // Connect to MongoDB
@@ -53,7 +49,6 @@ const createAdminIfNotExists = async () => {
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
-<<<<<<< HEAD
     // Logging to check values
     console.log('Admin Email:', adminEmail);
     console.log('Admin Password:', adminPassword);
@@ -80,29 +75,11 @@ const createAdminIfNotExists = async () => {
         } catch (error) {
             console.error('Error creating admin user:', error);
         }
-=======
-    let user = await User.findOne({ email: adminEmail });
-
-    if (!user) {
-        const hashedPassword = await bcrypt.hash(adminPassword, 10);
-        user = new User({
-            name: 'Admin',
-            email: adminEmail,
-            password: hashedPassword,
-            isAdmin: true
-        });
-        await user.save();
-        console.log('Admin user created');
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
     } else {
         console.log('Admin user already exists');
     }
 };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5c64ad7d335ec1c6cbad6af605c00cc65055c806
 createAdminIfNotExists();
 
 

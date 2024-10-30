@@ -30,7 +30,7 @@ function extractYouTubeVideoId(url) {
 // Route to handle the upload
 router.post('/upload', async (req, res) => {
     try {
-        const { title, content, link, type } = req.body;
+        const { title, content, link, type, category } = req.body;
         let videoInfo = null;
 
         if (link.includes('spotify.com')) {
@@ -43,7 +43,7 @@ router.post('/upload', async (req, res) => {
             if (!videoId) {
                 return res.status(400).send("Invalid YouTube link. Please use a valid video link.");
             }
-            videoInfo = { id: videoId, type: 'youtube' };
+            videoInfo = { id: videoId, type: 'youtube', category:category};
         }
 
         const newPost = new Post({
@@ -52,7 +52,8 @@ router.post('/upload', async (req, res) => {
             link,
             type,
             VideoId: videoInfo.id,
-            videoType: videoInfo.type // Store if it's an 'episode', 'show', or 'youtube'
+            videoType: videoInfo.type,
+            subCategory: videoInfo.category // Store if it's an 'episode', 'show', or 'youtube'
         });
 
         await newPost.save();

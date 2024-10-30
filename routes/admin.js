@@ -2,18 +2,30 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
-const { isAdmin } = require('../middleware/auth');
+const { isAdmin, checkAuthenticated } = require('../middleware/auth');
 
 
 // Admin Dashboard
+// Serve admin dashboard for admin users, redirect to profile for regular users
 router.get('/admin', isAdmin, async (req, res) => {
     try {
+        // Since isAdmin middleware ensures the user is an admin, we can directly render the admin view
         const podcasts = await Post.find({ type: 'podcast' });
         const courses = await Post.find({ type: 'course' });
-
         res.render('admin', { podcasts, courses });
     } catch (error) {
         console.error("Error fetching posts:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// Serve profile page for all users, admin included
+router.get('/profile', async (req, res) => {
+    try {
+        // Render profile page for all users
+        res.render('profile'); // Adjust if you want to send different data based on user type
+    } catch (error) {
+        console.error("Error fetching profile:", error);
         res.status(500).send("Internal Server Error");
     }
 });

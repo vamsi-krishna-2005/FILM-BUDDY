@@ -15,7 +15,8 @@ const postSchema = new mongoose.Schema({
         default: Date.now
     },
     VideoId: String,
-    videoType: String
+    videoType: String,
+    subCategory: String
 });
 
 module.exports = mongoose.model('Post', postSchema);

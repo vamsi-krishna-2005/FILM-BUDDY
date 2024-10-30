@@ -22,9 +22,15 @@ function extractSpotifyId(url) {
 
 // Render the podcast page
 router.get('/podcast', async (req, res) => {
-    const podcasts = await Post.find({ type: 'podcast' });
-    res.render('podcasts', { podcasts, user:req.user });
+    try {
+        const podcasts = await Post.find({ type: 'podcast' });
+        res.render('podcasts', {podcasts}); // Render podcasts view with data
+    } catch (error) {
+        console.error('Error fetching podcasts:', error);
+        res.status(500).render('error', { message: 'Server Error' }); // Render an error page instead of sending JSON
+    }
 });
+
 
 // Route for uploading a new podcast
 router.post('/podcast/upload', async (req, res) => {

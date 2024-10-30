@@ -20,8 +20,8 @@ router.get('/course', async (req, res) => {
 
 // Route for uploading a new course
 router.post('/course/upload', async (req, res) => {
-    const { title, content, link } = req.body;
-    const newPost = new Post({ title, content, link, type: 'course' });
+    const { title, content, link, subCategory } = req.body;
+    const newPost = new Post({ title, content, link, type: 'course', subCategory});
     await newPost.save();
     res.redirect('/admin/course'); // Redirect to course list
 });
@@ -37,5 +37,13 @@ router.get('/course/:id', async (req, res) => {
         res.status(500).send('Error loading podcast');
     }
 });
+
+router.get('/movies', async(req, res) => {
+    res.render('movies');
+})
+
+router.get('/store', async(req, res)=> {
+    res.render('store');
+})
 
 module.exports = router;

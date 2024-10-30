@@ -22,13 +22,24 @@
         </form>
 
         <h2>Upload Course</h2>
-        <form action="/upload" method="POST">
-            <input type="hidden" name="type" value="course"> <!-- Set type as course -->
-            <input type="text" name="title" placeholder="Course Title" required />
-            <textarea name="content" placeholder="Course Description" rows="4" required></textarea> <!-- Textarea for content -->
-            <input type="text" name="link" placeholder="YouTube Link" required />
-            <button type="submit">Upload Course</button>
-        </form>
+<form action="/upload" method="POST">
+    <input type="hidden" name="type" value="course"> <!-- Set type as course -->
+    <input type="text" name="title" placeholder="Course Title" required />
+    <textarea name="content" placeholder="Course Description" rows="4" required></textarea> <!-- Textarea for content -->
+    <input type="text" name="link" placeholder="YouTube Link" required />
+
+    <!-- Dropdown for course categories -->
+    <label for="category">Category:</label>
+    <select name="category" id="category" required>
+        <option value="VFX">VFX</option>
+        <option value="Screenwriting">Screenwriting</option>
+        <option value="Directing">Directing</option>
+        <option value="Editor">Editor</option>
+        <option value="Cinematography">Cinematography</option>
+    </select>
+
+    <button type="submit">Upload Course</button>
+</form>
 
         <h2>Podcasts List</h2>
         <table class="table">

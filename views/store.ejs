@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmmaking E-commerce Store</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css"/>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #838282;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #333;
+            color: white;
+            margin-top:86px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .search-bar,
+        .category-dropdown {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .product {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product h3 {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #ff0000;
+            font-weight: bold;
+            background-color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .add-to-cart {
+            background: #ff6600;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+        .logout{
+            list-style-type: none;
+            color:white;
+            font-family:'roboto';
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark custom-navbar mb-5">
+        <a class="navbar-brand" style='font-weight:600;font-size:40px;' href="/">FILM<span>BUDDY</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/" onclick="navHomePage()">HOME <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/podcast" onclick="navPodcastPage()">PODCAST</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/movies" onclick="navMoviesPage()">MOVIES</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/course" onclick="navLearnPage()">LEARN</a>
+            </li>
+            <li class="nav-item active navs">
+                <a class="nav-link" href="/store" onclick="navStorePage()">STORE</a>
+              </li>
+              <li class="nav-item dropdown active navs">
+                <div class="dropdown">
+                <% if (locals.user) { %>
+                    <div class="mail-logo" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-outline-danger signined-mail"> <%= locals.user.name[0]  %> </button>
+                     </div>
+                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                         <a class="dropdown-item" href="#">Profile</a>
+                         <form id="logout-form" action="/logout" method="post">
+                             <button type="submit" class="dropdown-item">Logout</button>
+                         </form>
+                     </div>
+                <% } else { %>        
+                    <button class="btn btn-danger" onclick="window.location.href='/login'">SIGN IN</button>
+                <% } %>
+                </div>
+            </li>
+          </ul>
+        </div>
+    </nav>
+    <!-- Header Section -->
+    <div class="header">
+        
+        <input id='storeSearch' type="text" class="search-bar" placeholder="Search products...">
+        <select id='productDropdown' class="category-dropdown">
+            <option value="all+in+filmmaking">All Categories</option>
+            <option value="filmmaking+cameras">Cameras</option>
+            <option value="filmmaking+lights">Lighting Equipment</option>
+            <option value="audio+in+filmmaking">Audio Equipment</option>
+        </select>
+    </div>
+    <div class="d-none mt-5" id="spinner">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <!-- Product Listing Section -->
+    <div class="product-list" id="productList">
+        <!-- Products will be dynamically injected here -->
+    </div>
+    
+    <!-- Modal for Product Details -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProductModal()">&times;</span>
+            <img src="" id="productmodalimg" style="width:40%;"/>
+            <h2 id="productTitle">Product Title</h2>
+            <p id="productPrice">Price: </p>
+            <p>Payment Method: Credit/Debit  Card  PayPal</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+
+    <script>
+        
+
+// Function to open modal with product details
+function openProductModal(asin) {
+    let options={
+        method:'GET',
+    }
+    fetch('https://api.ecommerceapi.io/amazon_product?api_key=6721048a08856076bacfda6d&domain=com&asin='+asin,options)
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(obj){
+        console.log(obj.product_results);
+        document.getElementById('productmodalimg').src=obj.product_results.images[0];
+        document.getElementById('productTitle').innerText = obj.product_results.title;
+        document.getElementById('productPrice').innerText = "Price: " + obj.product_results.price;
+        document.getElementById('productModal').style.display = 'flex';
+    })
+    
+}
+
+// Function to display products
+function displayProducts(products) {
+    const productList = document.getElementById('productList');
+    productList.innerHTML = '';
+
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product');
+        productCard.setAttribute('data-name', product.title);
+        productCard.addEventListener('click',()=>openProductModal(product.asin));
+
+        productCard.innerHTML = `
+                   <img src="${product.image}" alt="${product.name}">
+                   <h3>${product.title}</h3>
+                   <p>${product.price}</p>
+               `;
+
+        productList.appendChild(productCard);
+    });
+}
+
+
+
+// Fetch data from external source and display products
+function fetchFilmEquipment(search='filmmaking+equipments') {
+    let spin=document.getElementById('spinner');
+    if (spin) {
+        spin.classList.remove('d-none');
+    }
+    let options = {
+        method: 'GET',
+    };
+    fetch(`https://api.ecommerceapi.io/amazon_search?api_key=6721048a08856076bacfda6d&url=https://www.amazon.in/s?k=${search}`, options)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(obj) {
+            if (spin) {
+                spin.classList.add('d-none');
+            }
+            console.log(obj.results);
+            displayProducts(obj.results);
+        });
+}
+
+
+
+
+
+
+// Function to close modal
+function closeProductModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
+fetchFilmEquipment();
+
+    // Search filter
+
+
+
+// Wait until the DOM is fully loaded
+
+    
+    let searchStore=document.getElementById('storeSearch');
+    if(searchStore){
+        console.log('hello');
+        document.getElementById('storeSearch').addEventListener('change', function(event) {
+            
+            console.log('Hello')
+            document.getElementById('productList').textContent='';
+            let searchTerm = event.target.value.toLowerCase();
+            searchTerm=searchTerm.replace(' ','+');
+            fetchFilmEquipment(searchTerm);
+            
+    });
+    }else{
+        console.log('something fishy');
+    }
+    // Category filter
+    document.getElementById('productDropdown').addEventListener('change', function(event) {
+        console.log('dropdown working');
+        document.getElementById('productList').textContent='';
+        const category = event.target.value.toLowerCase();
+        fetchFilmEquipment(category);
+    });
+    
+    
+
+    </script>
+
+</body>
+
+</html>

@@ -1,120 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>FilmBuddy Podcast</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/cf4baec49e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css"/>
-    <title>Podcasts</title>
     <style>
-        /* Page Header */
-        .header {
-            background-color: #000;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-            font-size: 2em;
-            font-weight: bold;
-        }
-        
-        /* Subscribe Bar */
-        .subscribe-bar {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-            color: #fff;
-        }
-        .subscribe-bar a {
-            color: #f00;
-            margin: 0 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        /* Podcast Card Styles */
-        .podcast-card {
-            transition: transform 0.3s ease;
-            border: none;
-            background-color: #f8f8f8;
-            color: #000;
-            text-align: center;
-        }
-        .podcast-card:hover {
-            transform: scale(1.05);
-        }
-        .podcast-img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease;
-        }
-        .podcast-card:hover .podcast-img {
-            filter: grayscale(0%);
-        }
-
-        /* Title and Date Styling */
-        .card-title {
-            font-size: 1.25em;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .date-text {
-            font-size: 0.9em;
-            color: #6c757d;
-            font-style: italic;
-        }
-        .listen-now {
-            color: #f00;
-            font-weight: bold;
-            text-transform: uppercase;
+        .logout{
+            list-style-type: none;
+            color:white;
+            font-family:'roboto';
         }
     </style>
 </head>
 <body>
-    
-    <!-- Header Section -->
-    <div class="header">FILM RIOT</div>
-
-    <!-- Subscribe Bar -->
-    <div class="subscribe-bar">
-        Subscribe: 
-        <a href="#">iTunes</a> |
-        <a href="#">Spotify</a> |
-        <a href="#">Google Play</a> |
-        <a href="#">Overcast</a> |
-        <a href="#">Stitcher</a> |
-        <a href="#">Podbean</a> |
-        <a href="#">Soundcloud</a> |
-        <a href="#">TuneIn</a> |
-        <a href="#">YouTube</a>
-    </div>
-
-    <!-- Main Content -->
-    <div class="container mt-5">
-        <div class="row">
-            <% podcasts.forEach(podcast => { %>
-                <div class="col-md-6 mb-4">
-                    <div class="card podcast-card">
-                        <a href="/podcast/<%= podcast._id %>">
-                            <img src="FR_Podcast_David-Boxerbaum-featured-1280x720.jpg" alt="<%= podcast.title %>" class="podcast-img">
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title"><%= podcast.title %></h5>
-                            <p class="date-text"><%= new Date(podcast.createdAt).toLocaleDateString() %></p>
-                            <a href="/podcast/<%= podcast._id %>" class="listen-now">Listen Now »</a>
-                        </div>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark custom-navbar mb-5">
+        <a class="navbar-brand" style='font-weight:600;font-size:40px;' href="/">FILM<span>BUDDY</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/" onclick="navHomePage()">HOME <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/podcast">PODCAST</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/movies" onclick="navMoviesPage()">MOVIES</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/course" onclick="navLearnPage()">LEARN</a>
+            </li>
+            <li class="nav-item active navs">
+                <a class="nav-link" href="/store" onclick="navStorePage()">STORE</a>
+              </li>
+              <li class="nav-item dropdown active navs">
+                <div class="dropdown">
+                <% if (locals.user) { %>
+                    <div class="mail-logo" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       <button class="btn btn-outline-danger signined-mail"> <%= locals.user.name[0]  %> </button>
                     </div>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="/profile">Profile</a>
+                        <form id="logout-form" action="/logout" method="post">
+                            <button type="submit" class="dropdown-item">Logout</button>
+                        </form>
+                    </div>
+                <% } else { %>        
+                    <button class="btn btn-danger" onclick="window.location.href='/login'">SIGN IN</button>
+                <% } %>
                 </div>
-            <% }); %>
+            </li>
+          </ul>
+        </div>
+    </nav>
+
+    <div class='container text-center mt-5'>
+        <div class='row text-center'>
+            <div class='col-12' id='embed-container'>
+                <div class="episodes">
+                    <!-- Loop through each podcast entry -->
+                    <% if (podcasts && podcasts.length > 0) { %>
+                        <% podcasts.forEach(function(podcast) { %>
+                            <div class="podcast">
+                                <h2><%= podcast.title %></h2>
+                                <p><%= podcast.content %></p>
+                                <iframe class="spotify-embed"
+                                        src="https://open.spotify.com/embed/<%= podcast.videoType %>/<%= podcast.VideoId %>"
+                                        width="100%" height="152" frameborder="0"
+                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+                                </iframe>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p>No podcasts available.</p>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Bootstrap JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page with Left-Aligned Profile Photo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSS5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/cf4baec49e.js" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color:black;color:white;}
+        .profile-container { width: 100%; border-radius: 10px; text-align: center; overflow: hidden; }
+        
+        /* Banner Styling */
+        .banner { width: 100%; height: 200px; background-image: url('https://img.freepik.com/premium-photo/camera-set-with-blue-orange-background-camera-set-up_1185498-101705.jpg?semt=ais_hybrid'); background-size: cover; background-position: center; position: relative; }
+        
+        /* Left-Aligned Profile Photo Overlapping Style */
+        .profile-photo { 
+            width: 100px; 
+            height: 100px; 
+            border-radius: 50%; 
+            background-color: red; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 2em; 
+            color: #fff; 
+            border: 5px solid #fff;
+            position: absolute;
+            bottom: -40px; /* Position to overlap banner and details */
+            left: 20px; /* Left-aligned within the container */
+        }
+        strong { color: #eb1e1e; }
+        
+        /* Profile Details */
+        .profile-details { padding: 60px 20px 20px; text-align: left; } /* Adjusted padding to align with photo */
+        .profile-details p { margin: 5px 0; }
+        .edit-button { background-color: #333; color: #fff; padding: 10px; border: none; cursor: pointer; border-radius: 5px; }
+        
+        /* Modal Styling */
+        .modal {  
+            position: absolute; /* Changed to absolute */
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index: 1; /* Ensure it's on top */
+        }
+        
+        /* Animation for sliding down */
+        .modal-content {
+            background-color: black;  
+            padding: 20px; 
+            border: 1px solid #888; 
+            width: 90%; 
+            max-width: 500px; 
+            border-radius: 8px; 
+            text-align: left; 
+            transform: translateY(-100vh); /* Start out of view */
+            animation: slideDown 0.5s forwards; /* Apply slide-down animation */
+        }
+        
+        /* Keyframes for sliding animation */
+        @keyframes slideDown {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(0); }
+        }
+
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+        .modal input, .modal textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .save-button { background-color: #4CAF50; color: #fff; padding: 10px; border: none; cursor: pointer; border-radius: 5px; width: 100%; }
+    </style>
+</head>
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark custom-navbar">
+        <a class="navbar-brand" style='font-weight:600;font-size:40px;' href="#">FILM<span style="color:red">BUDDY</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active navs">
+              <a class="nav-link" href="#" onclick="navHomePage()">HOME <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="#" onclick="navPodcastPage()">PODCAST</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="#" onclick="navMoviesPage()">MOVIES</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="#" onclick="navLearnPage()">LEARN</a>
+            </li>
+            <li class="nav-item active navs">
+                <a class="nav-link" href="#" onclick="navStorePage()">STORE</a>
+              </li>
+            <li class="nav-item active navs">
+                <div class="dropdown">
+                    <button class="btn btn-outline-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      SIGN IN
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">Profile</a>
+                      <a class="dropdown-item" href="#">Sign out</a>
+                    </div>
+                  </div>
+            </li>
+          </ul>
+        </div>
+    </nav>
+<div class="profile-container">
+    <!-- Banner Section -->
+    <div class="banner">
+        <div class="profile-photo" id="profilePhoto">A</div>
+    </div>
+    
+    <!-- Profile Details Section -->
+    <div class="profile-details">
+        <p><strong>USER NAME:</strong> <span id="username">V. Vamsi Krishna</span></p>
+        <p><strong>EMAIL:</strong> <span id="email">vamsiDarkNightKing@example.com</span></p>
+        <p><strong>PHONE NUMBER:</strong> <span id="phone">1234567890</span></p>
+        <p><strong>INTERESTED FIELDS:</strong> <span id="interests">Pornography, Foreplay, BDSM, Orgasm</span></p>
+        <p><strong>ADDRESS:</strong> <span id="address">143 redLight Area, Mumbai Maharashtra</span></p>
+        <p><strong>BIO:</strong> <span id="bio">Passionate about becoming Pornstar and working with pooja Hedge.</span></p>
+        <button class="btn btn-danger mt-3" onclick="openModal()">Edit Profile</button>
+    </div>
+</div>
+
+<!-- Modal Popup for Editing Profile -->
+<div id="editModal" class="modal d-none">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 >EDIT PROFILE</h2>
+        <input type="text" id="editUsername" placeholder="Username" class="form-control" style="background-color:black;color:white;border-color:red;"/>
+        <input type="email" id="editEmail" placeholder="Email" class="form-control" style="background-color:black;color:white;border-color:red;"/>
+        <input type="tel" id="editPhone" placeholder="Phone Number" class="form-control" style="background-color:black;color:white;border-color:red;"/>
+        <textarea id="editInterests" placeholder="Interested Fields" class="form-control" style="background-color:black;color:white;border-color:red;"></textarea>
+        <textarea id="editAddress" placeholder="Address" class="form-control" style="background-color:black;color:white;border-color:red;"></textarea>
+        <textarea id="editBio" placeholder="Bio" class="form-control" style="background-color:black;color:white;border-color:red;"></textarea>
+        <button class="btn btn-danger" onclick="saveProfile()">Save Changes</button>
+    </div>
+</div>
+
+<script>
+    // Open Modal Function
+    function openModal() {
+        const modal = document.getElementById('editModal');
+        modal.classList.remove('d-none');
+        modal.style.display = 'flex'; // Use flex to center the modal content
+        document.getElementById('editUsername').value = document.getElementById('username').textContent;
+        document.getElementById('editEmail').value = document.getElementById('email').textContent;
+        document.getElementById('editPhone').value = document.getElementById('phone').textContent;
+        document.getElementById('editInterests').value = document.getElementById('interests').textContent;
+        document.getElementById('editAddress').value = document.getElementById('address').textContent;
+        document.getElementById('editBio').value = document.getElementById('bio').textContent;
+    }
+
+    // Close Modal Function
+    function closeModal() {
+        document.getElementById('editModal').classList.add('d-none');
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    // Save Profile Function
+    function saveProfile() {
+        document.getElementById('username').textContent = document.getElementById('editUsername').value;
+        document.getElementById('email').textContent = document.getElementById('editEmail').value;
+        document.getElementById('phone').textContent = document.getElementById('editPhone').value;
+        document.getElementById('interests').textContent = document.getElementById('editInterests').value;
+        document.getElementById('address').textContent = document.getElementById('editAddress').value;
+        document.getElementById('bio').textContent = document.getElementById('editBio').value;
+
+        // Update profile photo with the first character of the email if no custom photo
+        const emailInitial = document.getElementById('editEmail').value.charAt(0).toUpperCase();
+        document.getElementById('profilePhoto').textContent = emailInitial;
+
+        closeModal(); // Close the modal after saving
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('editModal')) {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>

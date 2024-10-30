@@ -24,9 +24,6 @@ function isAdmin(req, res, next) {
 }
 
 
-router.get('/upload', isAdmin, (req, res) => {
-    res.render('upload');  // Only accessible by admins
-});
 
 module.exports = {
     checkAuthenticated,

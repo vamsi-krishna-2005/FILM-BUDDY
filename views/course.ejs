@@ -1,104 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/cf4baec49e.js" crossorigin="anonymous"></script>
-    <title>Courses</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="main.js"></script>
     <style>
-        /* Styling for the thumbnail */
-        .course-video-container {
-            position: relative;
-            cursor: pointer;
-            margin: 20px auto;
-            overflow: hidden;
-            border-radius: 8px;
-        }
-        .course-thumbnail {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            filter: brightness(0.6); /* Dark overlay effect */
-        }
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 2em;
-        }
-        /* Styling for the modal content */
-        .modal-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .modal-title {
-            font-size: 1.8em;
-            font-weight: bold;
-        }
-        .course-description {
-            margin-top: 20px;
-            font-size: 1.1em;
-            color: #6c757d;
-            font-style: italic;
-            line-height: 1.5;
+        .logout{
+            list-style-type: none;
+            color:white;
+            font-family:'roboto';
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Courses</h1>
-        <div class="row">
-            <% courses.forEach(course => { %>
-                <div class="col-md-4 mb-4">
-                    <div class="course-video-container" data-toggle="modal" data-target="#videoModal<%= course._id %>">
-                        <!-- Full-size YouTube thumbnail with dark overlay -->
-                        <img src="https://img.youtube.com/vi/<%= course.VideoId %>/0.jpg" alt="<%= course.title %>" class="course-thumbnail">
-                        <div class="overlay">
-                            <i class="fas fa-play-circle"></i>
-                        </div>
-                    </div>
-                    <div class="course-info text-center">
-                        <h5><%= course.title %></h5>
-                        <p class="date-text"><%= new Date(course.createdAt).toLocaleDateString() %></p>
-                    </div>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark custom-navbar mb-5">
+        <a class="navbar-brand" style='font-weight:600;font-size:40px;' href="/">FILM<span>BUDDY</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/" onclick="navHomePage()">HOME <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/podcast" onclick="navPodcastPage()">PODCAST</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/movies" onclick="navMoviesPage()">MOVIES</a>
+            </li>
+            <li class="nav-item active navs">
+              <a class="nav-link" href="/course" onclick="navLearnPage()">LEARN</a>
+            </li>
+            <li class="nav-item active navs">
+                <a class="nav-link" href="/store" onclick="navStorePage()">STORE</a>
+              </li>
+              <li class="nav-item dropdown active navs">
+                <div class="dropdown">
+                <% if (locals.user) { %>
+                    <div class="mail-logo" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-outline-danger signined-mail"> <%= locals.user.name[0]  %> </button>
+                     </div>
+                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                         <a class="dropdown-item" href="#">Profile</a>
+                         <form id="logout-form" action="/logout" method="post">
+                             <button type="submit" class="dropdown-item">Logout</button>
+                         </form>
+                     </div>
+                <% } else { %>        
+                    <button class="btn btn-danger" onclick="window.location.href='/login'">SIGN IN</button>
+                <% } %>
                 </div>
-
-                <!-- Video Modal with content below -->
-                <div class="modal fade" id="videoModal<%= course._id %>" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel<%= course._id %>" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="videoModalLabel<%= course._id %>"><%= course.title %></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Embedded video -->
-                                <iframe width="100%" height="400" src="https://www.youtube.com/embed/<%= course.VideoId %>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                
-                                <!-- Title and description below the video -->
-                                <h5 class="modal-title mt-3"><%= course.title %></h5>
-                                <p class="course-description">
-                                    <%= course.content %> <!-- Assumes `description` is part of course data -->
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <% }); %>
+            </li>
+          </ul>
         </div>
-    </div>
+    </nav>
+    <div id="learnPage" class="learn-page">
+        
+        <div class="learn-page-mini-navbar">
+            <button onclick="showVideos('Directing')">DIRECTING</button>
+            <button onclick="showVideos('Editing')">EDITOR</button>
+            <button onclick="showVideos('Cinematography')">CINEMATOGRAPHY</button>
+            <button onclick="showVideos('Screenwriting')">SCREENWRITING</button>
+            <button onclick="showVideos('VFX')">VFX</button>
+        </div>
+        
+        <div class="learn-page-video-grid-with-input">
+            <input type="search" class='learn-page-input' id="video-input" placeholder=" Tutorials..."/>
+            <div id="video-container" class="learn-page-video-grid">
+            
+            </div>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <div id="popup-overlay" class="learn-page-popup-overlay" onclick="closePopup()"></div>
+
+        <div id="video-popup" class="learn-page-video-popup">
+            <button class="learn-page-close-btn" onclick="closePopup()">×</button>
+            <iframe id="popup-video" src="" frameborder="0" allowfullscreen></iframe>
+            <div class="learn-page-popup-description">
+                <h2 id="video-title"></h2>
+                <p id="video-description"></p>
+            </div>
+        </div>
+
+    </div>
+    <div id="course-data" style="display: none;">
+        <% courses.forEach(course => { %>
+            <div class="course-item" 
+                data-id="<%= course.VideoId %>" 
+                data-title="<%= course.title %>" 
+                data-description="<%= course.content %>" 
+                data-category="<%= course.subCategory %>">
+            </div>
+        <% }); %>
+    </div>
+    <script>
+    let videoData = [    
+        { id: "e0EX6LEDN8U", title: "How to make EVERY decision", description: "Directing a film can be simplified to just changing the question in front of you.", category: "Directing" },
+        { id: "kDzUx6t09tg", title: "How to Direct Actors", description: "How to Direct Actors for Film — a collection of directing advice from some of the best directors.", category: "Directing" },
+        { id: 'Jw_ysaoVlt4', title: 'Art of the Opening Scene', description: 'The Art of the Opening Scene — six methods of how to start a movie.', category: "Directing" },
+        { id: 'SJyTb90neKs', title: 'Directing Actors — 24 Filmmakers', description: 'Directing Actors Pt. 2 — a collection of directing advice from 24 of the best directors.', category: "Directing" },
+        { id: '7TeEIBxSed0', title: 'Filmmaking Advice for 30 Minutes', description: 'In this 30-minute masterclass, 25 of the industry"s top film directors share their invaluable experience.', category: "Directing" },
+        { id: 'MYlgj1hwcYw', title: '7 Rules of Cinematic Framing', description: 'Framing and Composition are some of the most important factors of good cinematography.', category: "Directing" },
+        { id: 'q9boBUuz7dw', title: 'Composition', description: 'The SECRET to CINEMATIC Composition', category: "Directing" },
+        { id: 'ZHUMKLk5rHE', title: 'How To Transform Any Room Into a Film Scene', description: 'The crew you need is a gaffer to operate the lights...', category: "Directing" },
+        { id: '2fwdog9xFow', title: 'The one thing for EVERY filmmaker ', description: 'With so many amazing advances in technology, it’s easy to overlook light.', category: "Directing" },
+        { id: 'SlNviMsi0K0', title: '12 CAMERA ANGLES to Enhance Your Films', description: 'Instantly Unlock Our Free Filmmaking Workshop "10 Secrets To Cinematic Shots":', category: "Directing" },
+        { id: '49HTIoCccDY', title: 'Taj Mahal', description: 'Taj Mahal beautiful place.', category: "Directing" },
+        { id:'KVBc2Pg81rw', title:'Cinematic Composition', description:'8 Steps to Cinematic Composition | Tomorrow"s Filmmakers', category:'Cinematography' },
+        { id:'0suVZjz3_Uw', title:'Cinematic Lighting', description:'8 Steps to Cinematic Lighting | Tomorrow"s Filmmakers', category:'Cinematography' },
+        { id:'ExebCguDG7s', title:'Cinematic Movement', description:'8 Steps to Cinematic Movement | Tomorrow"s Filmmakers', category:'Cinematography' },
+        { id:'BdPsyLtlamM', title:'Aspect Ratio', description:'Aspect Ratios | Tomorrow"s Filmmakers', category:'Cinematography' },
+        { id:'3uTuhbLylmw', title:'Travel Videos', description:'10 Steps To Cinematic Travel Videos | Tomorrow"s Filmmakers', category:'Cinematography' },
+        { id:'h-MB0Sej9tQ', title:'Color Grading', description:'Why Modern Movies Look So CLEAN and How To Fix Them', category:'Cinematography' },
+        { id:'Ow7w7FUAkdk', title:'Cinematography', description:'The 3 Basics Of Cinematography', category:'Cinematography' },
+        { id:'CvLQJReDhic', title:'Composition In Storytelling', description:'How to compose a film? How to frame an image?', category:'Cinematography' },
+        { id:'FHK1kyTZKIk', title:'Shot Composition', description:'Though art can be made in many forms...', category:'Cinematography' },
+        { id:'KwtpJ3T8eK4', title:'Cinematography Learn from a Master', description:'In this film created by Enlightening Education...', category:'Cinematography' },
+        { id:'XqeCHzk2RdA', title:'Video Lighting Tutorial', description:'In this video lighting tutorial, I cover 3 lighting tips...', category:'Cinematography' },
+        { id: 'FVR8zz8ci2k', title: '6 Ways to Edit Any Scene', description: 'Ultimate guide to film and video editing techniques, including eyeline match, cross cutting, eye trace, j cut and l cut, intellectual montage, and cut on action.', category: "Editing" },
+        { id: 'TKXBAaQB03U', title: 'Ultimate Guide to Scene Transitions', description: 'Creative video transitions and scene transitions explained, including J cut, match cut, fade in and more.', category: "Directing", category:'Editing' },
+        { id: 'Wcxw3BPSt3A', title: 'How to SOUND DESIGN', description: 'Editing sound design is part of our job as creative editors. Watch as we take an edit with "ok" sound design and fix the sound to work much, much better.', category:'Editing'},
+        { id: '4uvwY4CR59U', title: 'My Sound Design Process', description: 'In this video Quinn is challenged by Saul to sound design the social promo for camp flog gnaw carnival. Peek over Quinn"s shoulder as she shows you the step by step process for sound design and the how to think about each sfx you add.',  category:'Editing'},
+        { id: '4OVPisiqstY', title: 'MUST KNOW Sound Design', description: 'Learn how to make your videos sound more professional by using sound design in this Premiere Pro tutorial video', category: "Directing" , category:'Editing'},
+        { id: '4ZdZQEkN_5k', title: '5 FAST & EASY VISUAL EFFECTS', description: '5 EASY and FAST visual EFFECTS in Adobe Premiere Pro. Learn how to create the invisibility cloak from Harry Potter, the Lightning effects from Thor, some editing magic tricks and a very clean sky replacement. Make your own Hollywood effects!', category:'Editing'},
+        { id: 'Ty9f_NrfZsw', title: '5 EPIC Video EFFECTS ', description: 'Top 5 EPIC Video EFFECTS In Premiere Pro!',  category:'Editing'},
+        { id: 'iT5pBqDtwjo', title: '6 Creative Masking Effects', description: 'n this tutorial you’re going to learn 6 different creative masking effects.  Here are the time-codes so you can skip headed, if needed: (1:42) Masking Text Animation(4:25) Masking a Text Reveal (7:00) Using a Mask for Screen Reflections or Replacements(8:28) Sky Replacements(10:34) Color Correction(11:34) Masking Identity (hiding identity)',  category:'Editing'},
+        { id: 'jg9UbgvnLuo', title: '5 FAST & EASY VISUAL EFFECTS', description: 'Create simple and fast visual effects in Premiere Pro. Use these tips and tricks to achieve easy, but professional Special effects for your next project.', category:'Editing'},
+        { id: 'Wv3Hmf2Dxlo', title: '9 Cuts for Every Video Editor', description: 'For a breakdown of each cut every editor should know, check out our blog!', category:'Editing'},
+        { id: 'CWb6ldBOhNE', title: 'Cut Transition', description: 'This tutorial dives into advanced editing techniques, featuring inspiration from Cole Bennett"s work with top artists. I"ll guide you through crafting visually stunning transitions, offering insights for both novices and experienced editors. ', category:'Editing'},
+        { id: 'nxl1LKo_GUs', title: 'SEAMLESS Timelapse', description: 'SEAMLESS Timelapse Match Cut Effect | Premiere Pro Tutorial', category:'Editing'},
+    ];
+
+    document.querySelectorAll('#course-data .course-item').forEach(course => {
+            videoData.push({
+                id: course.getAttribute('data-id'),
+                title: course.getAttribute('data-title'),
+                description: course.getAttribute('data-description'),
+                category: course.getAttribute('data-category')
+            });
+        });
+
+ 
+function showVideos(category) {
+    let videoContainer = document.getElementById('video-container');
+    videoContainer.innerHTML = '';
+    
+    videoData.map(video => {
+        if(video.category===category){
+            const videoDiv = document.createElement('div');
+            videoDiv.className = 'learn-page-video-thumbnail';
+            
+            videoDiv.innerHTML = `<img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}" onclick="openPopup('https://www.youtube.com/embed/${video.id}', '${video.title}', '${video.description}')">`;
+            
+            let desc = document.createElement('p');
+            desc.classList.add('under-video');
+            desc.textContent = video.title;
+            
+            videoDiv.appendChild(desc);
+            videoContainer.appendChild(videoDiv);
+            }
+    });
+}
+
+
+function openPopup(url, title, description) {
+    document.getElementById('popup-video').src = url;
+    document.getElementById('video-title').textContent = title;
+    document.getElementById('video-description').textContent = description;
+    document.getElementById('popup-overlay').style.display = 'block';
+    document.getElementById('video-popup').style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('popup-video').src = '';
+    document.getElementById('popup-overlay').style.display = 'none';
+    document.getElementById('video-popup').style.display = 'none';
+}
+
+      showVideos('Directing')
+      const inputElement = document.getElementById("video-input");
+
+    // Check if the input element exists before attaching event listener
+    if (inputElement) {
+        console.log('learn-input working');
+        inputElement.addEventListener("input", function(event) {
+            const filter = event.target.value.toLowerCase();
+            const videoContainer = document.getElementById('video-container');
+            
+            // Clear existing videos
+            videoContainer.innerHTML = '';
+            
+            // Filter videoData based on the input filter
+            const filteredData = videoData.filter(item => item.title.toLowerCase().includes(filter));
+            
+            // Loop through each filtered video and create video elements
+            filteredData.forEach(video => {
+                const videoDiv = document.createElement('div');
+                videoDiv.className = 'learn-page-video-thumbnail';
+                
+                videoDiv.innerHTML = `<img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}" onclick="openPopup('https://www.youtube.com/embed/${video.id}', '${video.title}', '${video.description}')">`;
+                
+                const desc = document.createElement('p');
+                desc.classList.add('under-video');
+                desc.textContent = video.title;
+
+                videoDiv.appendChild(desc);
+                videoContainer.appendChild(videoDiv);
+            });
+        });
+    }
+    </script>
 </body>
 </html>

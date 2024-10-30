@@ -32,11 +32,7 @@ router.post('/login', checkNotAuthenticated, (req, res, next) => {
                 email: user.email
             };
 
-            if (user.isAdmin) {
-                return res.redirect('/admin');
-            } else {
-                return res.redirect('/'); // Redirect non-admins to the homepage
-            }
+            return res.redirect('/');
         });
     })(req, res, next);
 });

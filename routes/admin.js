@@ -22,8 +22,13 @@ router.get('/admin', isAdmin, async (req, res) => {
 // Serve profile page for all users, admin included
 router.get('/profile', async (req, res) => {
     try {
+        if (!req.session.user) {
+            // Handle case when user is not logged in or session expired
+            return res.status(401).redirect('/login');
+        }
         // Render profile page for all users
-        res.render('profile'); // Adjust if you want to send different data based on user type
+        const { name, email} = req.session.user;
+        res.render('profile', {user: {name, email}}); // Adjust if you want to send different data based on user type
     } catch (error) {
         console.error("Error fetching profile:", error);
         res.status(500).send("Internal Server Error");

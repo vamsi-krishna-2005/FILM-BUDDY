@@ -31,7 +31,7 @@ router.post('/login', checkNotAuthenticated, (req, res, next) => {
                 name: user.name, 
                 email: user.email
             };
-
+            console.log('Session after login:', req.session);
             return res.redirect('/');
         });
     })(req, res, next);

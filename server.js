@@ -9,6 +9,7 @@ const initializePassport = require('./config/passport-config')
 const User = require('./models/User')
 const bcrypt = require('bcrypt')
 const { isAdmin } = require('./middleware/auth')
+const MongoStore = require('connect-mongo')
 const app = express()
 
 // Connect to MongoDB
@@ -26,8 +27,9 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
-}))
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }), // Replace with your MongoDB connection string
+    cookie: { secure: false } 
+}));
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))

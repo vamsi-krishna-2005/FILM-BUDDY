@@ -47,7 +47,7 @@
                        <button class="btn btn-outline-danger signined-mail"> <%= locals.user.name[0]  %> </button>
                     </div>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <% if (req.user && req.user.isAdmin) { %>
+                        <% if (locals.user && locals.user.isAdmin) { %>
                             <a href="/admin" class="dropdown-item">Profile</a>
                         <% } else { %>
                             <a href="/profile" class="dropdown-item">Profile</a>

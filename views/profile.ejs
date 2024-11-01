@@ -95,6 +95,44 @@
         .buddy{
             color:red;
         }
+         /* Modal Styling */
+         .modal {  
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index: 1;
+        }
+
+        /* Animation for sliding down */
+        .modal-content {
+            background-color: black;
+            padding: 20px; 
+            border: 1px solid #888; 
+            width: 90%; 
+            max-width: 500px; 
+            border-radius: 8px; 
+            text-align: left; 
+            transform: translateY(-100vh);
+            animation: slideDown 0.5s forwards;
+        }
+
+        /* Keyframes for sliding animation */
+        @keyframes slideDown {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(0); }
+        }
+
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+        .modal input, .modal textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .save-button { background-color: #4CAF50; color: #fff; padding: 10px; border: none; cursor: pointer; border-radius: 5px; width: 100%; }
+
     </style>
 </head>
 <body>
@@ -169,6 +207,24 @@
         <button class="ship-order-btn" onclick="placeOrder()">Ship Order</button>
     </div>
 
+    <div id="editModal" class="modal d-none">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Edit Profile</h2>
+            <label for="editUsername">Username:</label>
+            <input type="text" id="editUsername" value="<%= user.name %>" />
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" value="<%= user.email %>" />
+            <label for="editPhone">Phone Number:</label>
+            <input type="tel" id="editPhone" value="1234567890" />
+            <label for="editInterests">Interested Fields:</label>
+            <input type="text" id="editInterests" value="Filmmaking, Editing" />
+            <label for="editBio">Bio:</label>
+            <textarea id="editBio">Passionate about filmmaking.</textarea>
+            <button class="btn btn-danger mt-2" onclick="saveProfile()">Save Changes</button>
+        </div>
+    </div>
+
     <script>
         // Declare the cartItems array
         let cartItems = [];
@@ -189,6 +245,21 @@
             }
         }
     
+
+        function openModal() { document.getElementById("editModal").classList.remove("d-none"); }
+        function closeModal() { document.getElementById("editModal").classList.add("d-none"); }
+
+        // Saving profile changes
+        function saveProfile() {
+            document.getElementById("username").innerText = document.getElementById("editUsername").value;
+            document.getElementById("email").innerText = document.getElementById("editEmail").value;
+            document.getElementById("phone").innerText = document.getElementById("editPhone").value;
+            document.getElementById("interests").innerText = document.getElementById("editInterests").value;
+            document.getElementById("bio").innerText = document.getElementById("editBio").value;
+            closeModal();
+        }
+
+
         // Function to display cart items in the "Your Orders" section
         function displayCartItems(products) {
             const orderList = document.getElementById('orderList');

@@ -202,7 +202,7 @@
         <!-- Input field for quantity -->
         <input type="number" id="productQuantity" class="form-control" value="1" min="1" style="width: 60px; margin-bottom: 10px;" />
         <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
-        <div id="successMessage" class="success-message">Item added to cart successfully!</div>
+    
     </div>
 </div>
 
@@ -352,10 +352,10 @@ fetchFilmEquipment();
         console.error('Price format not recognized:', priceString);
         return; // Exit if price format is not recognized
     }
-
+    
     // Log the cart item being added
     console.log('Adding to cart:', { title, price, quantity }); 
-
+    
     const cartItem = {
         title: title,
         price: price,
@@ -383,10 +383,11 @@ fetchFilmEquipment();
     .catch(error => {
         console.error('Error adding to cart:', error);
     });
-    document.getElementById('successMessage').style.display = 'block';
+    alert('product is added to cart Successfully');
     setTimeout(function() {
         window.location.href = '/store';
     }, 1000);
+
 }
 
     </script>

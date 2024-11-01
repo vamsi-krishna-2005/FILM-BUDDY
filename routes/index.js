@@ -30,7 +30,7 @@ router.post('/add-to-cart', async (req, res) => {
         });
         console.log('Session in /add-to-cart:', req.session); // Check if user session is present
         await cartItem.save();
-        res.status(200).json({ message: 'Item added to cart', cartItem });
+        res.status(200).json({ message: 'Item added to cart' });
     } catch (error) {
         console.error('Error adding item to cart:', error); // Log the error
         res.status(500).json({ message: 'Error adding item to cart', error });
@@ -50,6 +50,10 @@ router.get('/products', async(req, res)=> {
 router.post('/orders', async (req, res) => {
     try {
         const { userDetails, cartItems, totalPrice } = req.body;
+
+        if (!cartItems || cartItems.length === 0) {
+            return res.status(400).json({ message: 'No items in cart.' });
+        }
 
         // Save the order details in the Orders collection
         const newOrder = new Order({

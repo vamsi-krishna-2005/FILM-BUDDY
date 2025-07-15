@@ -180,6 +180,8 @@
                             <% } else if (podcast.videoType === 'show') { %>
                                 <iframe src="https://open.spotify.com/embed/show/<%= podcast.VideoId %>" width="100%" height="232" frameBorder="0" allow="encrypted-media"></iframe>
                             <% } %>
+        
+                            <p><%= podcast.content %></p>
                         </div>
                     </div>
                 </div>

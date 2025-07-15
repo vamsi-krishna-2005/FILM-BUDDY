@@ -214,7 +214,7 @@ function openProductModal(asin) {
     let options = {
         method: 'GET',
     }
-    fetch('https://api.ecommerceapi.io/amazon_product?api_key=6723a83ac7cce8fa650d9e37&domain=com&asin=' + asin, options)
+    fetch('https://api.ecommerceapi.io/amazon_product?api_key=6724626a12d9c08d14a03775&domain=com&asin=' + asin, options)
         .then(function(response) {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
@@ -283,7 +283,7 @@ function fetchFilmEquipment(search='filmmaking+equipments') {
     let options = {
         method: 'GET',
     };
-    fetch(`https://api.ecommerceapi.io/amazon_search?api_key=6723a83ac7cce8fa650d9e37&url=https://www.amazon.in/s?k=${search}`, options)
+    fetch(`https://api.ecommerceapi.io/amazon_search?api_key=6724626a12d9c08d14a03775&url=https://www.amazon.in/s?k=${search}`, options)
         .then(function(response) {
             return response.json();
         })
